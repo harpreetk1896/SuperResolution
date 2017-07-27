@@ -136,14 +136,22 @@ public class SelectorFrame extends javax.swing.JFrame {
             img=ReadWriteJPG.ConvertToImg(SuperResolution.PixelArray, DemoPanel.width, DemoPanel.height,"Bilinear.jpg");
         }
         else
-        {}
+        {
+            SuperResolution.upscaleFactor=2;
+            CubicInterpolation2d cubicInterpolation2d = new CubicInterpolation2d();
+            SuperResolution.PixelArray = cubicInterpolation2d.bicube(SuperResolution.PixelArray,DemoPanel.width,DemoPanel.height);
+            DemoPanel.width =cubicInterpolation2d.widthGet() ; DemoPanel.height =cubicInterpolation2d.heightGet();
+            img=ReadWriteJPG.ConvertToImg(SuperResolution.PixelArray, cubicInterpolation2d.widthGet(), cubicInterpolation2d.heightGet(),"Bicubic.jpg");
+        }
         
         if(jRadioButtonSobel.isSelected())
         {
             (new EdgeSegmentFrame(SuperResolution.PixelArray,img)).setVisible(true);
         }
         else
-        {}
+        {
+             new CannyEdgeFrame(SuperResolution.PixelArray, img).setVisible(true);
+        }
         dispose();
     }//GEN-LAST:event_jButtonOKActionPerformed
 
